@@ -86,20 +86,11 @@ jobs:
       uses: actions/github-script@v6
       with:
         script: |
-          try {
-            const response = await github.pulls.createReview({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: ${{ github.event.workflow_run.pull_requests[0].number }},
-              event: 'APPROVE',
-            });
-            console.log(response.data);
-
-            if (pullRequests.data.length === 0) {
-              console.error('No open pull requests found for the main branch.');
-              process.exit(1);
-            }
-          } catch (error) {
-            console.error('Error during approval:', error.message);
-            process.exit(1);
-          }
+          const response = await github.pulls.createReview({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: ${{ github.event.workflow_run.pull_requests[0].number }},
+            event: 'APPROVE',
+          });
+          console.log(response.data);
+         
