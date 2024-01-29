@@ -26,7 +26,12 @@ jobs:
       run: |
         mvn clean install
         mvn clean package
-
+        
+    - name: Archive Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: java-app
+        path: target/
     
   
   release:
@@ -41,11 +46,7 @@ jobs:
     - name: Set Release Version
       run: echo "RELEASE_VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
     
-    - name: Archive Artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: java-app
-        path: target/
+    
     - name: Release
       run: echo "Release"
   
