@@ -1,0 +1,88 @@
+name: Multi-Stage Pipeline 2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Java
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+
+    - name: Build
+      run: mvn clean install
+
+    - name: Archive Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: java-app
+        path: target/
+
+  deploy_dev:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Download Artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: java-app
+        path: target/
+
+    - name: Deploy to Dev
+      run: echo "Deploying to Dev environment"
+
+  deploy_qa:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Download Artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: java-app
+        path: target/
+
+    - name: Deploy to QA
+      run: echo "Deploying to QA environment"
+
+  approve_prod:
+    runs-on: ubuntu-latest
+    needs: deploy_prod
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Request Manual Approval
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const response = await github.pulls.createReview({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.payload.pull_request.number,
+            event: 'APPROVE',
+          });
+          console.log(response.data);
+  deploy_prod:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Download Artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: java-app
+        path: target/
+
+    - name: Deploy to Prod
+      run: echo "Deploying to Prod environment"
