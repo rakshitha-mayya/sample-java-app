@@ -33,6 +33,18 @@ jobs:
       with:
         name: java-app
         path: target/
+  tag:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Create Tag
+      run: echo "::set-env name=RELEASE_VERSION::$(date +'%Y%m%d%H%M%S')"
+      
+    - name: Tag Repository
+      run: |
+        git tag $RELEASE_VERSION
+        git push origin $RELEASE_VERSION
 
   deploy_dev:
     runs-on: ubuntu-latest
@@ -76,21 +88,4 @@ jobs:
     - name: Deploy to Prod
       run: echo "Deploying to Prod environment"
 
-  approve_prod:
-    runs-on: ubuntu-latest
-    needs: deploy_qa
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
-    steps:
-    - name: Request Manual Approval
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const response = await github.pulls.createReview({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            pull_number: ${{ github.event.workflow_run.pull_requests[0].number }},
-            event: 'APPROVE',
-          });
-          console.log(response.data);
-         
