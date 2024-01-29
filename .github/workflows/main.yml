@@ -76,7 +76,7 @@ jobs:
 
   deploy_prod:
     runs-on: ubuntu-latest
-    needs: approve_prod
+    needs: deploy_qa
 
     steps:
     - name: Download Artifacts
