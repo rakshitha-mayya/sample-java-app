@@ -38,7 +38,7 @@ jobs:
         git tag $RELEASE_VERSION
         git push origin $RELEASE_VERSION
       env:
-        GH_TOKEN: ${{ secrets.GIT_TOKEN }}
+        GH_TOKEN: ${{ secrets.NEW_GIT_SECRET }}
 
     - name: Archive Artifacts
       uses: actions/upload-artifact@v2
