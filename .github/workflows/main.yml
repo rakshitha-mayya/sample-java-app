@@ -75,7 +75,7 @@ jobs:
 
   approve_prod:
     runs-on: ubuntu-latest
-    needs: deploy_prod
+    needs: deploy_qa
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
