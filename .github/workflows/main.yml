@@ -1,0 +1,59 @@
+name: Multi-Stage Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Java
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+
+    - name: Build
+      run: mvn clean install
+
+  tag:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Create Tag
+      run: echo "::set-env name=RELEASE_VERSION::$(date +'%Y%m%d%H%M%S')"
+      
+    - name: Tag Repository
+      run: |
+        git tag $RELEASE_VERSION
+        git push origin $RELEASE_VERSION
+
+  deploy_dev:
+    runs-on: ubuntu-latest
+    needs: tag
+
+    steps:
+    - name: Deploy to Dev
+      run: echo "Deploying to Dev environment"
+
+  deploy_qa:
+    runs-on: ubuntu-latest
+    needs: tag
+
+    steps:
+    - name: Deploy to QA
+      run: echo "Deploying to QA environment"
+
+  deploy_prod:
+    runs-on: ubuntu-latest
+    needs: tag
+
+    steps:
+    - name: Deploy to Prod
+      run: echo "Deploying to Prod environment"
