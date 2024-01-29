@@ -99,15 +99,6 @@ jobs:
               console.error('No open pull requests found for the main branch.');
               process.exit(1);
             }
-
-            const response = await github.pulls.createReview({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: pullRequests.data[0].number,
-              event: 'APPROVE',
-            });
-
-            console.log('Review Response:', response.data);
           } catch (error) {
             console.error('Error during approval:', error.message);
             process.exit(1);
