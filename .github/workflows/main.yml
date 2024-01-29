@@ -37,13 +37,15 @@ jobs:
   release:
     runs-on: ubuntu-latest
     needs: build
+  
     steps:
-    steps:
+    
     - name: Checkout Repository
       uses: actions/checkout@v2
       with:
         ref: main
         token: ${{ secrets.NEW_GIT_SECRET}}
+    
     - name: Download Artifacts
       uses: actions/download-artifact@v2
       with:
