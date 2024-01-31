@@ -98,8 +98,7 @@ jobs:
 
   deploy_prod:
     runs-on: ubuntu-latest
-    environment: 'request_approval'
-    needs: deploy_qa
+    needs: request_approval
 
     steps:
     - name: Download Artifacts
@@ -117,7 +116,7 @@ jobs:
     
     steps:
     - name: Request Approval
-      uses: srt32/approvals-action@v2
+      uses: srt32/owner/repo@ref
       with:
         message: 'Approve or reject this deployment'
         reviewers: 'rakshithamayya6@gmail.com' # GitHub username of the person who can approve
