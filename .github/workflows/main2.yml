@@ -21,13 +21,13 @@ jobs:
 
       - name: Deploy to Chosen Environment
         run: |
-          if [ "${{ github.event.inputs.environment }}" == "development" ]; then
+          if [ "${{ github.event.inputs.environment }}" == "dev" ]; then
             echo "Deploying to development..."
             # Add your deployment logic for the development environment
-          elif [ "${{ github.event.inputs.environment }}" == "qa" ]; then
+          elif [ "${{ github.event.inputs.environment }}" == "QA" ]; then
             echo "Deploying to QA..."
             # Add your deployment logic for the QA environment
-          elif [ "${{ github.event.inputs.environment }}" == "production" ]; then
+          elif [ "${{ github.event.inputs.environment }}" == "Prod" ]; then
             echo "Deploying to production..."
             # Add your deployment logic for the production environment
           else
