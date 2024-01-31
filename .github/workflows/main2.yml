@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to deploy to'    
+        description: 'Environment to deploy to' 
+        type: choice
         options:
           - 'dev'
           - 'QA'
