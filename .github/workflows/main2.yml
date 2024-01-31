@@ -12,50 +12,38 @@ on:
         required: true
 
 jobs:
-  deploy_dev:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Deploy to Chosen Environment
-        run: |
-          if [ "${{ github.event.inputs.environment }}" == "dev" ]; then
-            echo "Deploying to development..."
-            # Add your deployment logic for the development environment
-          fi
+      - name: Set up Environment
+        run: echo "Setting up environment=${{ github.event.inputs.environment }}"
         env:
-          API_KEY: ${{ secrets.NEW_GIT_SECRET }}
-          
-  deploy_qa:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+          ENVIRONMENT: ${{ github.event.inputs.environment }}
 
-      - name: Deploy to Chosen Environment
-        run: |
-          if [ "${{ github.event.inputs.environment }}" == "QA" ]; then
-            echo "Deploying to development..."
-            # Add your deployment logic for the development environment
-          fi
-        env:
-          API_KEY: ${{ secrets.NEW_GIT_SECRET }}
-          
-  deploy_prod:
+  deploy-development:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    if: github.event.inputs.environment == 'dev'
 
-      - name: Deploy to Chosen Environment
-        run: |
-          if [ "${{ github.event.inputs.environment }}" == "Prod" ]; then
-            echo "Deploying to development..."
-            # Add your deployment logic for the development environment
-         
-          fi
-        env:
-          API_KEY: ${{ secrets.NEW_GIT_SECRET }}
-      
+    steps:
+      - name: Deploy to Development
+        run: echo "Deploying to development..."
+
+  deploy-qa:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.environment == 'QA'
+
+    steps:
+      - name: Deploy to QA
+        run: echo "Deploying to QA..."
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.environment == 'Prod'
+
+    steps:
+      - name: Deploy to Production
+        run: echo "Deploying to production..."
