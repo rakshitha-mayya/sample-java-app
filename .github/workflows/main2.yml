@@ -12,12 +12,35 @@ on:
         required: true
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Java
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+
+    - name: Build
+      run: |
+        mvn clean install
+        mvn clean package
+        
+    - name: Archive Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: java-app
+        path: target/
+    
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      
 
       - name: Set up Environment
         run: echo "Setting up environment=${{ github.event.inputs.environment }}"
@@ -29,6 +52,13 @@ jobs:
     if: github.event.inputs.environment == 'dev'
 
     steps:
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: java-app
+          path: target/
+          
       - name: Deploy to Development
         run: echo "Deploying to development..."
 
@@ -37,13 +67,24 @@ jobs:
     if: github.event.inputs.environment == 'QA'
 
     steps:
-      - name: Deploy to QA
-        run: echo "Deploying to QA..."
+    - name: Download Artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: java-app
+        path: target/
+        
+    - name: Deploy to QA
+      run: echo "Deploying to QA..."
 
   deploy-production:
     runs-on: ubuntu-latest
     if: github.event.inputs.environment == 'Prod'
 
     steps:
-      - name: Deploy to Production
-        run: echo "Deploying to production..."
+      - name: Download Artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: java-app
+        path: target/
+    - name: Deploy to Production
+      run: echo "Deploying to production..."
