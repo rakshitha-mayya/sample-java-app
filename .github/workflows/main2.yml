@@ -12,7 +12,7 @@ on:
         required: true
 
 jobs:
-  deploy:
+  deploy_dev:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,15 +24,50 @@ jobs:
           if [ "${{ github.event.inputs.environment }}" == "dev" ]; then
             echo "Deploying to development..."
             # Add your deployment logic for the development environment
-          elif [ "${{ github.event.inputs.environment }}" == "QA" ]; then
-            echo "Deploying to QA..."
-            # Add your deployment logic for the QA environment
-          elif [ "${{ github.event.inputs.environment }}" == "Prod" ]; then
-            echo "Deploying to production..."
-            # Add your deployment logic for the production environment
+         
           else
             echo "Unknown environment. Deployment aborted."
             exit 1
           fi
         env:
           API_KEY: ${{ secrets.NEW_GIT_SECRET }}
+
+    deploy_qa:
+      runs-on: ubuntu-latest
+        steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Deploy to Chosen Environment
+      run: |
+        run: |
+          if [ "${{ github.event.inputs.environment }}" == "QA" ]; then
+            echo "Deploying to development..."
+            # Add your deployment logic for the development environment
+         
+          else
+            echo "Unknown environment. Deployment aborted."
+            exit 1
+          fi
+        env:
+          API_KEY: ${{ secrets.NEW_GIT_SECRET }}
+    deploy_prod:
+      runs-on: ubuntu-latest
+        steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Deploy to Chosen Environment
+      run: |
+        run: |
+          if [ "${{ github.event.inputs.environment }}" == "Prod" ]; then
+            echo "Deploying to development..."
+            # Add your deployment logic for the development environment
+         
+          else
+            echo "Unknown environment. Deployment aborted."
+            exit 1
+          fi
+        env:
+          API_KEY: ${{ secrets.NEW_GIT_SECRET }}
+      
