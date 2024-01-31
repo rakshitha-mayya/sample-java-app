@@ -38,7 +38,7 @@ jobs:
     
   deploy:
     runs-on: ubuntu-latest
-
+    needs: build
     steps:
       
 
@@ -49,6 +49,7 @@ jobs:
 
   deploy-development:
     runs-on: ubuntu-latest
+    needs: deploy
     if: github.event.inputs.environment == 'dev'
 
     steps:
@@ -64,6 +65,7 @@ jobs:
 
   deploy-qa:
     runs-on: ubuntu-latest
+    needs: deploy
     if: github.event.inputs.environment == 'QA'
 
     steps:
@@ -78,13 +80,14 @@ jobs:
 
   deploy-production:
     runs-on: ubuntu-latest
+    needs: deploy
     if: github.event.inputs.environment == 'Prod'
 
     steps:
       - name: Download Artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: java-app
-        path: target/
-    - name: Deploy to Production
-      run: echo "Deploying to production..."
+        uses: actions/download-artifact@v2
+        with:
+          name: java-app
+          path: target/
+      - name: Deploy to Production
+        run: echo "Deploying to production..."
