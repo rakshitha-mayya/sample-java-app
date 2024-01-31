@@ -98,7 +98,8 @@ jobs:
 
   deploy_prod:
     runs-on: ubuntu-latest
-    needs: request_approval
+    environment: 'Prod'
+    needs: deploy_qa
 
     steps:
     - name: Download Artifacts
@@ -110,21 +111,7 @@ jobs:
     - name: Deploy to Prod
       run: echo "Deploying to Prod environment"
 
-  request_approval:
-    runs-on: ubuntu-latest
-    needs: deploy_qa
-    
-    steps:
-    - name: Request Approval
-      uses: srt32/owner/repo@ref
-      with:
-        message: 'Approve or reject this deployment'
-        reviewers: 'rakshithamayya6@gmail.com' # GitHub username of the person who can approve
-        state: 'pending'
  
-    - name: Deploy to Production
-      run: echo "Deploying to Prod environment"
-       
   approval:
     runs-on: ubuntu-latest
     needs: deploy_qa
