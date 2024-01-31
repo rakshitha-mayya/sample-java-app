@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to deploy to'
-        required: true
+        description: 'Environment to deploy to'    
         options:
           - 'dev'
           - 'QA'
           - 'Prod'
+        required: true
 
 jobs:
   deploy:
