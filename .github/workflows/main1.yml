@@ -53,14 +53,15 @@ jobs:
       run: |
         export VAULT_ADDR=https://localhost:8200
         export VAULT_TOKEN=${{ secrets.VAULT_TOKEN }}
-        export SECRET_VALUE=$(vault kv get mount="secret/" "mysecret")
+        export SECRET_VALUE=$(vault read -field=value secret/data/mysecret)
         echo "Secret value: $SECRET_VALUE"
+        echo "VAULT_SECRET=$SECRET_VALUE" >> $GITHUB_ENV
 
     - name: Checkout Repository
       uses: actions/checkout@v2
       with:
         ref: main
-        token: $SECRET_VALUE
+        token: $VAULT_SECRET
     
     - name: Download Artifacts
       uses: actions/download-artifact@v2
