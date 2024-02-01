@@ -39,32 +39,44 @@ jobs:
   
   release:
     runs-on: ubuntu-latest
-    needs: build
+
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
-      with:
-        ref: main
-        token: ${{ secrets.NEW_GIT_SECRET}}
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: java-app
+          path: target/
 
-    - name: Download Artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: java-app
-        path: target/
+      
+      - name: Set up Git
+        run: git config --global user.email "you@example.com" && git config --global user.name "Your Name"
 
-    - name: Set Release Version
-      run: echo "RELEASE_VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+      - name: Bump version
+        run: |
+          # Use a script or tool to bump the version (replace with your versioning logic)
+          current_version=$(cat VERSION)
+          new_version=$(./bump_version.sh $current_version)
+          echo $new_version > VERSION
+          git add VERSION
+          git commit -m "Bump version to $new_version"
 
-    - name: Tag Release
-      run: |
-        git config --global user.email "rakshithamayya6@gmail.com"
-        git config --global user.name "rakshitha-mayya"
-        git tag $RELEASE_VERSION
-        git push origin $RELEASE_VERSION
-    
-    - name: Release
-      run: echo "Release"
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v${{ cat VERSION }}
+          release_name: Release ${{ cat VERSION }}
+          body: |
+            Release notes go here
+
+      - name: Publish release
+        uses: actions/upload-release-asset@v1
+        with:
+          asset_path: ./your-artifact.jar
+          asset_name: your-artifact.jar
+          release_id: ${{ steps.create_release.outputs.id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.NEW_GIT_TOKEN }}
   
   deploy_dev:
     runs-on: ubuntu-latest
