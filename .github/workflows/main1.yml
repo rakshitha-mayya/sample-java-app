@@ -53,7 +53,7 @@ jobs:
       run: |
         export VAULT_ADDR=http://127.0.0.1:8200
         export VAULT_TOKEN=${{ secrets.VAULT_TOKEN }}
-        export SECRET_VALUE=$(vault read -field=value secret/data/mysecret)
+        export SECRET_VALUE=$(vault read -field=value secret/data/MYSECRET)
         echo "Secret value: $SECRET_VALUE"
         echo "VAULT_SECRET=$SECRET_VALUE" >> $GITHUB_ENV
 
