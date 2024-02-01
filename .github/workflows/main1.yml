@@ -48,17 +48,14 @@ jobs:
           path: target/
 
       
-      - name: Set up Git
-        run: git config --global user.email "rakshithamayya6@gmail.com" && git config --global user.name "rakshitha-mayya"
-
-      - name: Bump version
-        run: |
-          # Use a script or tool to bump the version (replace with your versioning logic)
-          current_version=$(cat VERSION)
-          new_version=$(./bump_version.sh $current_version)
-          echo $new_version > VERSION
-          git add VERSION
-          git commit -m "Bump version to $new_version"
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v$(cat VERSION)
+          release_name: Release $(cat VERSION)
+          body: |
+            Release notes go here
 
       - name: Create release
         id: create_release
