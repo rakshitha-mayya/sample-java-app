@@ -57,6 +57,7 @@ jobs:
         echo "Secret value: $SECRET_VALUE"
         echo "VAULT_SECRET=$SECRET_VALUE" >> $GITHUB_ENV
 
+
     - name: Checkout Repository
       uses: actions/checkout@v2
       with:
