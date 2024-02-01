@@ -56,6 +56,8 @@ jobs:
           release_name: Release $(cat VERSION)
           body: |
             Release notes go here
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
       - name: Publish release
