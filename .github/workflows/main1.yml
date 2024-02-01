@@ -57,14 +57,6 @@ jobs:
           body: |
             Release notes go here
 
-      - name: Create release
-        id: create_release
-        uses: actions/create-release@v1
-        with:
-          tag_name: v$new_version 
-          release_name: Release $new_version 
-          body: |
-            Release notes go here
 
       - name: Publish release
         uses: actions/upload-release-asset@v1
