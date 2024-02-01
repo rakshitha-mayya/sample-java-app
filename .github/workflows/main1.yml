@@ -53,7 +53,7 @@ jobs:
       run: |
         export VAULT_ADDR=http://localhost:8200
         export VAULT_TOKEN=${{ secrets.VAULT_TOKEN }}
-        export SECRET_VALUE=$(vault read -field=secretValue /v1/secret/data/mysecret)
+        export SECRET_VALUE=$(vault read -field=secretValue /secret/data/mysecret)
         echo "Secret value: $SECRET_VALUE"
 
     - name: Checkout Repository
