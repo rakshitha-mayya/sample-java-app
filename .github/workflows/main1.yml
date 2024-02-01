@@ -64,8 +64,8 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: v${{ new_version }}
-          release_name: Release ${{ new_version }}
+          tag_name: v$new_version 
+          release_name: Release $new_version 
           body: |
             Release notes go here
 
