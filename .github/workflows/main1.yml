@@ -51,7 +51,7 @@ jobs:
   
     - name: Retrieve secret from Vault
       run: |
-        export VAULT_ADDR=https://localhost:8200
+        export VAULT_ADDR=http://127.0.0.1:8200
         export VAULT_TOKEN=${{ secrets.VAULT_TOKEN }}
         export SECRET_VALUE=$(vault read -field=value secret/data/mysecret)
         echo "Secret value: $SECRET_VALUE"
