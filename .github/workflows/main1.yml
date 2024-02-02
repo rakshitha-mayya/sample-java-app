@@ -67,7 +67,7 @@ jobs:
       run: |
         git config user.email "rakshithamayya6@gmail.com"
         git config user.name "rakshitha-mayya"
-        echo "machine github.com login $GITHUB_ACTOR password $GITHUB_TOKEN" > ~/.netrc
+        echo "machine github.com login $GITHUB_ACTOR password $nEW_GIT_TOKEN" > ~/.netrc
       
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -77,11 +77,11 @@ jobs:
     - name: Install dependencies
       run: npm install
     
-    
+
     - name: Get current version
       id: get_version
       run: |
-        VERSION=$(git describe --tags --abbrev=0 --always 2>/dev/null || echo "v0.0.0")
+        VERSION=$(gh release list -L 1 --format="%(tag)" | cut -c 2-)
         echo "::set-output name=version::$VERSION"
 
     - name: Increment version
@@ -89,7 +89,7 @@ jobs:
       run: |
         # Custom logic to increment version (replace with your own logic)
         CURRENT_VERSION=${{ steps.get_version.outputs.version }}
-        NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. -v OFS=. '{++$(NF-1); $NF=0; print}')
+        NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. -v OFS=. '{++$NF; print}')
         echo "::set-output name=new_version::$NEW_VERSION"
 
     - name: Bump version and create release
