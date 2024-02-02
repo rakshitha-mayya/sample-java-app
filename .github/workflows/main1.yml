@@ -81,7 +81,6 @@ jobs:
       id: get_version
       run: |
         VERSION=$(git describe --tags --abbrev=0)
-        VERSION=${VERSION:-"v0.0.0"}
         echo "::set-output name=version::$VERSION"
 
     - name: Increment version
