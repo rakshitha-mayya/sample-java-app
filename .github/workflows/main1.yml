@@ -97,7 +97,7 @@ jobs:
         git push origin ${{ steps.bump_version.outputs.new_version }}
         gh release create ${{ steps.bump_version.outputs.new_version }} -t "Release ${{ steps.bump_version.outputs.new_version }}"
       env:
-        GITHUB_TOKEN: ${{ secrets.NEW_GIT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.NEW_GIT_SECRET }}
 
     #- name: Bump version and create release
     #  run: |
