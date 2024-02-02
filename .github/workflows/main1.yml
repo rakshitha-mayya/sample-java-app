@@ -83,7 +83,7 @@ jobs:
         git push origin v1.2.3
         gh release create v1.2.3 -t "Release v1.2.3"
       env:
-        GITHUB_TOKEN: ${{ secrets.NEW_GIT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.NEW_GIT_SECRET }}
 
   deploy_dev:
     runs-on: ubuntu-latest
