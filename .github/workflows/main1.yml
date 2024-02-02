@@ -88,7 +88,7 @@ jobs:
       run: |
         # Custom logic to increment version (replace with your own logic)
         CURRENT_VERSION=${{ steps.get_version.outputs.version }}
-        NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. -v OFS=. '{$NF++; print}')
+        NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. -v OFS=. '{++$(NF-1); $NF=0; print}')
         echo "::set-output name=new_version::$NEW_VERSION"
 
     - name: Bump version and create release
