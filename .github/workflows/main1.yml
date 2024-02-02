@@ -60,8 +60,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
       with:
-        ref: main
-        token: ${{ secrets.NEW_GIT_SECRET}}
+          fetch-depth: 0 
 
     - name: Set up Git
       run: |
