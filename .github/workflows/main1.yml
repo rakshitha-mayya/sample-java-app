@@ -66,7 +66,7 @@ jobs:
       run: |
         git config user.email "rakshithamayya6@gmail.com"
         git config user.name "rakshitha-mayya"
-        echo "machine github.com login $GITHUB_ACTOR password $NEW_GIT_TOKEN" > ~/.netrc
+        echo "machine github.com login $GITHUB_ACTOR password $NEW_GIT_SECRET" > ~/.netrc
       
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -81,7 +81,7 @@ jobs:
       id: previoustag
       uses: 'WyriHaximus/github-action-get-previous-tag@v1'
       env:
-        GITHUB_TOKEN: ${{ secrets.NEW_GIT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.NEW_GIT_SECRET }}
           
     - name: Get next version
       id: next
@@ -93,7 +93,7 @@ jobs:
       id: create_release_id
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.NEW_GIT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.NEW_GIT_SECRET }}
       with:
         tag_name: ${{ steps.next.outputs.version }}
         release_name: Release ${{ steps.next.outputs.version }}   
