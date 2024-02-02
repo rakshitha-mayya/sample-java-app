@@ -66,17 +66,17 @@ jobs:
       run: |
         git config user.email "rakshithamayya6@gmail.com"
         git config user.name "rakshitha-mayya"
-        echo "machine github.com login $GITHUB_ACTOR password $NEW_GIT_SECRET" > ~/.netrc
+        
       
-      
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '14'
+
+    #- name: Set up Node.js
+    #  uses: actions/setup-node@v3
+    #  with:
+    #    node-version: '14'
 
 
-    - name: Install dependencies
-      run: npm install
+    #- name: Install dependencies
+    #  run: npm install
 
     - name: Get Previous tag
       id: previoustag
