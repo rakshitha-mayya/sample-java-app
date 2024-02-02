@@ -61,12 +61,13 @@ jobs:
 
     - name: Checkout Repository
       uses: actions/checkout@v2
+      
 
     - name: Set up Git
       run: |
         git config user.email "rakshithamayya6@gmail.com"
         git config user.name "rakshitha-mayya"
-
+        echo "machine github.com login $GITHUB_ACTOR password $GITHUB_TOKEN" > ~/.netrc
       
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -82,8 +83,9 @@ jobs:
         git tag -a v1.2.3 -m "Release v1.2.3"
         git push origin v1.2.3
         gh release create v1.2.3 -t "Release v1.2.3"
-      env:
-        GITHUB_TOKEN: ${{ secrets.NEW_GIT_SECRET }}
+      with:
+        ref: main
+        token: ${{ secrets.NEW_GIT_SECRET}}
 
   deploy_dev:
     runs-on: ubuntu-latest
