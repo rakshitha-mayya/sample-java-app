@@ -77,33 +77,53 @@ jobs:
 
     - name: Install dependencies
       run: npm install
-    
 
-    - name: Get current version
-      id: get_latest_tag
-      run: |
-        LATEST_TAG=$(git describe --tags --abbrev=0 --always 2>/dev/null || echo "v0.0.0")
-        echo "::set-output name=latest_tag::$LATEST_TAG"
-
-    - name: Increment version
-      id: bump_version
-      run: |
-        LATEST_VERSION=${{ steps.get_latest_tag.outputs.latest_tag }}
-        IFS='.' read -r -a VERSION_PARTS <<< "$LATEST_VERSION"
-        ((VERSION_PARTS[${#VERSION_PARTS[@]}-1]++))
-        NEW_VERSION="${VERSION_PARTS[0]}"
-        for ((i = 1; i < ${#VERSION_PARTS[@]}; i++)); do
-          NEW_VERSION="${NEW_VERSION}.${VERSION_PARTS[i]}"
-        done
-        echo "::set-output name=new_version::$NEW_VERSION"
-
-    - name: Bump version and create release
-      run: |
-        git tag -a ${{ steps.bump_version.outputs.new_version }} -m "Release ${{ steps.bump_version.outputs.new_version }}"
-        git push origin ${{ steps.bump_version.outputs.new_version }}
-        gh release create ${{ steps.bump_version.outputs.new_version }} -t "Release ${{ steps.bump_version.outputs.new_version }}"
+    - name: Get Previous tag
+      id: previoustag
+      uses: 'WyriHaximus/github-action-get-previous-tag@v1'
       env:
-        GITHUB_TOKEN: ${{ secrets.NEW_GIT_SECRET }}
+        GITHUB_TOKEN: ${{ secrets.NEW_GIT_TOKEN }}
+          
+    - name: Get next version
+      id: next
+      uses: 'WyriHaximus/github-action-next-release-version@1.0.0'
+      with:
+        version: ${{ steps.previoustag.outputs.tag }}
+
+    - name: Create release
+      id: create_release_id
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.next.outputs.version }}
+        release_name: Release ${{ steps.next.outputs.version }}   
+
+    #- name: Get current version
+    #  id: get_latest_tag
+    #  run: |
+    #    LATEST_TAG=$(git describe --tags --abbrev=0 --always 2>/dev/null || echo "v0.0.0")
+    #    echo "::set-output name=latest_tag::$LATEST_TAG"
+
+    #- name: Increment version
+    #  id: bump_version
+    #  run: |
+    #    LATEST_VERSION=${{ steps.get_latest_tag.outputs.latest_tag }}
+    #    IFS='.' read -r -a VERSION_PARTS <<< "$LATEST_VERSION"
+    #    ((VERSION_PARTS[${#VERSION_PARTS[@]}-1]++))
+    #    NEW_VERSION="${VERSION_PARTS[0]}"
+    #    for ((i = 1; i < ${#VERSION_PARTS[@]}; i++)); do
+    #      NEW_VERSION="${NEW_VERSION}.${VERSION_PARTS[i]}"
+    #    done
+    #    echo "::set-output name=new_version::$NEW_VERSION"
+
+    #- name: Bump version and create release
+    #  run: |
+    #    git tag -a ${{ steps.bump_version.outputs.new_version }} -m "Release ${{ steps.bump_version.outputs.new_version }}"
+    #    git push origin ${{ steps.bump_version.outputs.new_version }}
+    #    gh release create ${{ steps.bump_version.outputs.new_version }} -t "Release ${{ steps.bump_version.outputs.new_version }}"
+    #  env:
+    #    GITHUB_TOKEN: ${{ secrets.NEW_GIT_SECRET }}
 
     #- name: Bump version and create release
     #  run: |
