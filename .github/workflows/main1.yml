@@ -82,15 +82,19 @@ jobs:
     - name: Get current version
       id: get_version
       run: |
-        VERSION=$(gh release list -L 1 --format="%(tag)" | cut -c 2-)
-        echo "::set-output name=version::$VERSION"
+        LATEST_TAG=$(git describe --tags --abbrev=0 --always 2>/dev/null || echo "v0.0.0")
+        echo "::set-output name=latest_tag::$LATEST_TAG"
 
     - name: Increment version
       id: bump_version
       run: |
-        # Custom logic to increment version (replace with your own logic)
-        CURRENT_VERSION=${{ steps.get_version.outputs.version }}
-        NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. -v OFS=. '{++$NF; print}')
+        LATEST_VERSION=${{ steps.get_latest_tag.outputs.latest_tag }}
+        IFS='.' read -r -a VERSION_PARTS <<< "$LATEST_VERSION"
+        ((VERSION_PARTS[${#VERSION_PARTS[@]}-1]++))
+        NEW_VERSION="${VERSION_PARTS[0]}"
+        for ((i = 1; i < ${#VERSION_PARTS[@]}; i++)); do
+          NEW_VERSION="${NEW_VERSION}.${VERSION_PARTS[i]}"
+        done
         echo "::set-output name=new_version::$NEW_VERSION"
 
     - name: Bump version and create release
