@@ -61,6 +61,12 @@ jobs:
 
     - name: Checkout Repository
       uses: actions/checkout@v2
+
+    - name: Set up Git
+      run: |
+        git config user.email "rakshithamayya6@gmail.com"
+        git config user.name "rakshitha-mayya"
+
       
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -78,7 +84,7 @@ jobs:
         gh release create v1.2.3 -t "Release v1.2.3"
       env:
         GITHUB_TOKEN: ${{ secrets.NEW_GIT_TOKEN }}
-        
+
   deploy_dev:
     runs-on: ubuntu-latest
     environment: 'dev'
