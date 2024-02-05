@@ -10,6 +10,19 @@
 # Specify the command to run on container start
 #CMD ["java", "-jar", "java-app.jar"]
 
+# Use an official Maven image as a builder stage
+FROM maven:3.8.4-openjdk-11 AS builder
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the Maven project files
+COPY pom.xml .
+COPY src ./src
+
+# Build the application
+RUN mvn clean install
+
 # Use an official OpenJDK runtime as the final stage
 FROM openjdk:11-jre-slim
 
