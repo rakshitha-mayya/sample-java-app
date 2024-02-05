@@ -35,7 +35,7 @@ jobs:
         path: target/
     
   docker-build-push:
-    needs: maven-build
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
