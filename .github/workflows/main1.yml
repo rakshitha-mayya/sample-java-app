@@ -55,7 +55,8 @@ jobs:
       run: |
         docker build -t ${{ secrets.DOCKER_USERNAME }}/java-app:latest .
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      working-directory: target
+      env:
+        DOCKER_CLI_ASL: "1"
 
     - name: Push the Docker image to Docker Hub
       run: docker push ${{ secrets.DOCKER_USERNAME }}/java-app:latest
