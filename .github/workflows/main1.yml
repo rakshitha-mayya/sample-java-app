@@ -57,7 +57,7 @@ jobs:
     - name: Build Docker image
       run: |
         docker buildx create --use
-        docker buildx -t my-app:imgv1 .
+        docker build -t my-app:imgv1 .
         docker tag my-app:imgv1   docker.io/${{ secrets.DOCKER_USERNAME }}/myapp:v1
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker push docker.io/${{ secrets.DOCKER_USERNAME }}/your-app:latest
