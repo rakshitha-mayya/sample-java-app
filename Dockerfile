@@ -1,11 +1,8 @@
-# Use an OpenJDK runtime as a base image
-FROM openjdk:11-jre-slim
+FROM openjdk:8-jre-alpine
 
-# Set the working directory to /app
-WORKDIR /app
+EXPOSE 8080
 
-# Copy the JAR file into the container at /app
-COPY target/your-app.jar .
+COPY ./build/libs/my-app-1.0-SNAPSHOT.jar /usr/app/
+WORKDIR /usr/app
 
-# Specify the command to run on container start
-CMD ["java", "-jar", "your-app.jar"]
+ENTRYPOINT ["java", "-jar", "my-app-1.0-SNAPSHOT.jar"]
