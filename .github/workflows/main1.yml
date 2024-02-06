@@ -41,19 +41,26 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+    - name: Build and Push Docker Image
+      uses: mr-smithers-excellent/docker-build-push@v4
+      with:
+        image: ${{ secrets.DOCKER_USERNAME }}/demo-app:latest
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+    # - name: Set up Docker Buildx
+    #   uses: docker/setup-buildx-action@v1
 
-    - name: Build Docker image
-      run: |
-        docker buildx create --use
-        docker buildx build -t docker.io/rakshithamayya/your-app:latest .
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker push docker.io/rakshithamayya/your-app:latest
+    # - name: Build Docker image
+    #   run: |
+    #     docker buildx create --use
+    #     docker buildx build -t docker.io/${{ secrets.DOCKER_USERNAME }}/your-app:latest .
+    #     docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+    #     docker push docker.io/${{ secrets.DOCKER_USERNAME }}/your-app:latest
 
-      env:
-        DOCKER_CLI_ASL: "1"
+    #   env:
+    #     DOCKER_CLI_ASL: "1"
     
   # docker-build-push:
   #   needs: build
