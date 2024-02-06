@@ -34,31 +34,31 @@ jobs:
         name: java-app
         path: target/
     
-  docker-build-push:
-    needs: build
-    runs-on: ubuntu-latest
+  # docker-build-push:
+  #   needs: build
+  #   runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v2
 
-    - name: Download artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: java-app
-        path: target/
+  #   - name: Download artifact
+  #     uses: actions/download-artifact@v2
+  #     with:
+  #       name: java-app
+  #       path: target/
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+  #   - name: Set up Docker Buildx
+  #     uses: docker/setup-buildx-action@v1
 
-    - name: Build the Docker image
-      run: |
-        docker buildx create --use
-        docker buildx build -t ${{ secrets.DOCKER_USERNAME }}/your-app:latest .
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker push ${{ secrets.DOCKER_USERNAME }}/your-app:latest
-      env:
-        DOCKER_CLI_ASL: "1"
+  #   - name: Build the Docker image
+  #     run: |
+  #       docker buildx create --use
+  #       docker buildx build -t ${{ secrets.DOCKER_USERNAME }}/your-app:latest .
+  #       docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+  #       docker push ${{ secrets.DOCKER_USERNAME }}/your-app:latest
+  #     env:
+  #       DOCKER_CLI_ASL: "1"
 
   release:
     runs-on: ubuntu-latest
