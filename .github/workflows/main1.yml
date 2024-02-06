@@ -42,27 +42,28 @@ jobs:
     - uses: actions/checkout@v3
       name: Check out code
 
-    - uses: mr-smithers-excellent/docker-build-push@v6
-      name: Build & push Docker image
-      with:
-        image: rakshithamayya/image:latest
-        tags: v1, latest
-        registry: docker.io
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+    # - uses: mr-smithers-excellent/docker-build-push@v6
+    #   name: Build & push Docker image
+    #   with:
+    #     image: rakshithamayya/image:latest
+    #     tags: v1, latest
+    #     registry: docker.io
+    #     username: ${{ secrets.DOCKER_USERNAME }}
+    #     password: ${{ secrets.DOCKER_PASSWORD }}
 
-    # - name: Set up Docker Buildx
-    #   uses: docker/setup-buildx-action@v1
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
 
-    # - name: Build Docker image
-    #   run: |
-    #     docker buildx create --use
-    #     docker buildx build -t docker.io/${{ secrets.DOCKER_USERNAME }}/your-app:latest .
-    #     docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-    #     docker push docker.io/${{ secrets.DOCKER_USERNAME }}/your-app:latest
+    - name: Build Docker image
+      run: |
+        docker buildx create --use
+        docker buildx build -t my-app:imgv1 .
+        docker tag ${{ secrets.DOCKER_USERNAME }}:imgv1   docker.io/${{ secrets.DOCKER_USERNAME }}/myapp:v1
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        docker push docker.io/${{ secrets.DOCKER_USERNAME }}/your-app:latest
 
-    #   env:
-    #     DOCKER_CLI_ASL: "1"
+      env:
+        DOCKER_CLI_ASL: "1"
     
   # docker-build-push:
   #   needs: build
