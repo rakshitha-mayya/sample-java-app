@@ -8,18 +8,18 @@
 # ENTRYPOINT ["java", "SampleApplication.java"]
 
 #Use an official Maven image as a build environment
-FROM maven:3.8.6-openjdk-11-slim AS build
+# FROM maven:3.8.6-openjdk-11-slim AS build
  
-# Set the working directory inside the container
-WORKDIR /app
+# # Set the working directory inside the container
+# WORKDIR /app
  
-# Copy the project files and directories to the container
-COPY pom.xml .
-COPY src ./src
+# # Copy the project files and directories to the container
+# COPY pom.xml .
+# COPY src ./src
  
-# Build the application
-RUN mvn clean install
-RUN mvn clean package
+# # Build the application
+# RUN mvn clean install
+# RUN mvn clean package
  
 # Create a final image for running the application
 FROM openjdk:11-jre-slim
