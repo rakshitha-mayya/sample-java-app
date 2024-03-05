@@ -20,8 +20,8 @@ jobs:
     - name: SonarQube Scan
       run: |
         if [ "${{ github.repository }}" == "rakshitha-mayya/sample-java" ]; then
-          echo "Running SonarQube scan for repo-1 with project key: ${{ parameters.sonar_project_key }}"
-          # Add SonarQube scan command for repo-1 with ${{ parameters.sonar_project_key }}
+          echo "Running SonarQube scan for repo-1 with project key:"
+  
         else
           echo "No SonarQube scan configured for repository: ${{ github.repository }}"
         fi  
