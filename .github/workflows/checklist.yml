@@ -8,8 +8,10 @@ on:
 jobs:
   checklist:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
       - name: Check if all items are checked
         id: checklist
         run: |
