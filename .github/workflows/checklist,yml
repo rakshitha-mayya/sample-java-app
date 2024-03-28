@@ -1,0 +1,31 @@
+name: Merge Checklist
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  checklist:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if all items are checked
+        id: checklist
+        run: |
+          checklist_content=$(cat merge_checklist.md)
+          unchecked_items=$(echo "$checklist_content" | grep -oP '\-\s\[[ x]\]\s\K.+')
+          if [[ -n "$unchecked_items" ]]; then
+            echo "Unchecked checklist items found:"
+            echo "$unchecked_items"
+            echo "::error::Please check all items in the checklist."
+            exit 1
+          else
+            echo "All checklist items are checked."
+          fi
+
+        - name: Prevent merge on failed checks
+          if: ${{ failure() }}
+          run: |
+            echo "::error::Workflow failed. Please resolve the issues before merging."
+            exit 1
