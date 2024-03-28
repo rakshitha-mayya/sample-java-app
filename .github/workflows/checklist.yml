@@ -24,8 +24,8 @@ jobs:
             echo "All checklist items are checked."
           fi
 
-        - name: Prevent merge on failed checks
-          if: ${{ failure() }}
-          run: |
-            echo "::error::Workflow failed. Please resolve the issues before merging."
-            exit 1
+      - name: Prevent merge on failed checks
+        if: ${{ failure() }}
+        run: |
+          echo "::error::Workflow failed. Please resolve the issues before merging."
+          exit 1
