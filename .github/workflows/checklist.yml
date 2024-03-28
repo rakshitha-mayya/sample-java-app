@@ -15,7 +15,7 @@ jobs:
       - name: Check if all items are checked
         id: checklist
         run: |
-          checklist_content=$(cat merge_checklist.md)
+          checklist_content=$(cat rakshitha-mayya/sample-java/merge_checklist.md@main)
           unchecked_items=$(echo "$checklist_content" | grep -oP '\-\s\[[ x]\]\s\K.+')
           if [[ -n "$unchecked_items" ]]; then
             echo "Unchecked checklist items found:"
