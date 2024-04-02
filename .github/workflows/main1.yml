@@ -4,7 +4,8 @@ on:
   #push:
     #branches:
       #- main
-  pull_request:
+  pull_request: 
+    types: [open, closed]
     branches:  
       - main 
  
@@ -248,7 +249,7 @@ jobs:
 
   deploy_prod:
     runs-on: ubuntu-latest
-    if: ${{github.event.pull_request.base.ref=='main' && github.event.pull_request.changed_file=='src/*'}}
+    if: ${{github.event.pull_request.base.ref=='main' && github.event.pull_request.merged && github.event.pull_request.changed_file=='src/*'}}
     environment: 'Prod'
     needs: deploy_qa
 
