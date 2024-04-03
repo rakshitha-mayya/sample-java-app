@@ -21,6 +21,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: result
-          path: ${{github.workspace}}/gitleaks-results.sarif
+          path: ${{github.workspace}}/results.sarif
 
       
