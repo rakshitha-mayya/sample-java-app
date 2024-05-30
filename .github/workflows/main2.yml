@@ -11,9 +11,17 @@ on:
           - 'QA'
           - 'Prod'
         required: true
+      jobs:
+        description: 'Environment to deploy to' 
+        type: choice
+        options:
+          - 'sonar'
+          - 'build'
+          - 'deploy'
 
 jobs:
   build:
+    if: ${{inputs.jobs == "build" }}
     runs-on: ubuntu-latest
 
     steps:
