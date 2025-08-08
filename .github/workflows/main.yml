@@ -24,11 +24,11 @@ jobs:
         mvn clean install
         mvn clean package
         
-    - name: Archive Artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: java-app
-        path: target/
+    # - name: Archive Artifacts
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: java-app
+    #     path: target/
     
   
   # release:
