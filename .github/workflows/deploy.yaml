@@ -69,6 +69,15 @@ jobs:
           echo '```' >> $GITHUB_STEP_SUMMARY
           cat trivy-results.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Create release
+        id: create_release_id
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v1.0.0
+          release_name: Release v1.0.0
           
    Build-Deploy:
     if: ${{github.event.pull_request.merged == true && github.event.pull_request.base.ref=='main'}}
@@ -90,7 +99,7 @@ jobs:
         
     - name: Build Docker image
       run: |
-        # CURRENT_TAG=$(echo $(git rev-parse --short HEAD))
+        CURRENT_TAG=$(echo $(git rev-parse --short HEAD))
         # echo ${CURRENT_TAG}
         # cd $PWD/application/node-k8s-app
         # docker build -t gitopsaksclusteracr.azurecr.io/nodejs-app:${CURRENT_TAG} .
@@ -101,20 +110,20 @@ jobs:
         CURRENT_TAG=$(git rev-parse --short HEAD)
         echo "Current tag: ${CURRENT_TAG}"
         
-        cd helmcharts
-        sed -i "s/tag: .*/tag: ${CURRENT_TAG}/" values.yaml
+        # cd helmcharts
+        # sed -i "s/tag: .*/tag: ${CURRENT_TAG}/" values.yaml
 
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
+        # git config user.name "github-actions[bot]"
+        # git config user.email "github-actions[bot]@users.noreply.github.com"
 
-        git add values.yaml
-        git commit -m "Update image tag to ${CURRENT_TAG}" || echo "No changes to commit"
-        git push 
+        # git add values.yaml
+        # git commit -m "Update image tag to ${CURRENT_TAG}" || echo "No changes to commit"
+        # git push 
 
     - name: deploy
       run: |
-        cd helmcharts
-        #login to cluster
+        # cd helmcharts
+        echo "login to cluster"
         #kubectl apply -f application.yaml -n argocd
 
     - name: Create release
