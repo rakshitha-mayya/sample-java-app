@@ -70,14 +70,6 @@ jobs:
           cat trivy-results.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
 
-      - name: Create release
-        id: create_release_id
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v1.0.0
-          release_name: Release v1.0.0
           
    Build-Deploy:
     if: ${{github.event.pull_request.merged == true && github.event.pull_request.base.ref=='main'}}
