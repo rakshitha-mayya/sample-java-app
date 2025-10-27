@@ -21,7 +21,7 @@ jobs:
         continue-on-error: true
         
    SonarQube-scan:
-    if: ${{github.event.action == 'opened' && github.event.pull_request.base.ref=='main'}}
+    if: ${{(github.event.action == 'opened' || github.event.action == 'synchronize') && github.event.pull_request.base.ref=='main'}}
     needs: Gitleaks
     runs-on: ubuntu-latest
     permissions: write-all
@@ -46,7 +46,7 @@ jobs:
           echo '<p align="center"><a href="https://sonarcloud.io/project/overview?id=rakshitha-mayya_sample-java-app">📊 View Full Report</a></p>' >> $GITHUB_STEP_SUMMARY
    
    Trivy-Scan:
-    if: ${{github.event.action == 'opened' && github.event.pull_request.base.ref=='main'}}
+    if: ${{(github.event.action == 'opened' || github.event.action == 'synchronize') && github.event.pull_request.base.ref=='main'}}
     needs: SonarQube-scan
     runs-on: ubuntu-latest
     permissions: write-all
@@ -71,7 +71,7 @@ jobs:
           echo '```' >> $GITHUB_STEP_SUMMARY
           
    Build-Deploy:
-    if: ${{github.event.action == 'merged' && github.event.pull_request.base.ref=='main'}}
+    if: ${{github.event.pull_request.merged == true && github.event.pull_request.base.ref=='main'}}
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
